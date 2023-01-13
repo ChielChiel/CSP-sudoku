@@ -1,4 +1,4 @@
-# sudoku
+# CSP-sudoku
 
 4 klassen:
 
