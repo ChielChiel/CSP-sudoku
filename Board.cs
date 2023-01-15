@@ -8,6 +8,10 @@ class Board
     public Dictionary<string, int> evaluationValues;
     public int Evaluation;
     public List<List<int>> blocks;
+    HashSet<int>[] rows;
+    HashSet<int>[] columns;
+    HashSet<int>[] blocksSet;
+
 
     //DeepClone creates an exact copy of the Board
     public Board DeepClone() {
@@ -21,6 +25,23 @@ class Board
         return clone;
     }
 
+    public HashSet<int>[] Rows
+    {
+        get { return rows; }
+        set { rows = value; }
+    }
+    public HashSet<int>[] Columns
+    {
+        get { return columns; }
+        set { columns = value; }
+    }
+
+    public HashSet<int>[] BlocksSet
+    {
+        get { return blocksSet; }
+        set { blocksSet = value; }
+    }
+
     // Used for deepcloning the object
     public Board(Node[] sudoku_, Dictionary<string, int> evaluatie_waarden_, int evaluatie_, List<List<int>> blokken_) {
         this.sudoku = sudoku_;
@@ -32,6 +53,7 @@ class Board
         this.evaluationValues = dc_eval;
         this.Evaluation = evaluatie_;
         this.blocks = blokken_;
+        this.Rows = rows;
     }
 
 
@@ -131,9 +153,20 @@ class Board
     public Node[] Create_Board(int[] sudoku_array) {
         Node[] board = new Node[sudoku_array.Length];
 
+        rows = new HashSet<int>[9];
+        columns = new HashSet<int>[9];
+        blocksSet = new HashSet<int>[9];
+
+        for (int i = 0; i < 9; i++)
+        {
+            rows[i] = new HashSet<int>();
+            columns[i] = new HashSet<int>();
+            blocksSet[i] = new HashSet<int>();
+        }
         for (int i = 0; i < sudoku_array.Length; i++)
         {
             // Add meta information about a number in the sudoku.
+            
             Node number = new Node();
             number.Swappable = (sudoku_array[i] == 0);
             number.Number = sudoku_array[i];
@@ -141,9 +174,25 @@ class Board
             Coordinate positie = GetCoordinate(i);
             number.Row = positie.Y;
             number.Column = positie.X;
+            int blockNumber = ((int)(positie.Y / 3) * 3) + (int)((positie.X) / 3);
+            number.Block = blockNumber;
 
+            if (sudoku_array[i] == 0)
+            {
+                number.Domain = new HashSet<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9};
+            }
+            else
+            {
+                rows[positie.Y].Add(sudoku_array[i]);
+                columns[positie.X].Add(sudoku_array[i]);
+                blocksSet[blockNumber].Add(sudoku_array[i]);
+               
+            }
+            this.Rows = rows;
             board[i] = number;
         }
+        foreach (int e in blocksSet[0])
+            Console.WriteLine(e);
         return board;
     } 
 

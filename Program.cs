@@ -25,7 +25,8 @@ namespace sudoku
             int[,] all_sudokus = ReadFromFile.ReadTXT(@$"{path_to_file}");
             int number_of_sudokus = all_sudokus.GetLength(0);
             Board sudoku;
-            for (int i = 0; i < number_of_sudokus; i++)
+            //for (int i = 0; i < number_of_sudokus; i++)
+            for (int i = 0; i < 2; i++)
             {
                 Console.WriteLine($"\n\x1b[1mSudoku number: {i + 1}\x1b[0m");
                 sudoku = new Board(all_sudokus.GetRow(i));
