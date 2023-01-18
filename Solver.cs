@@ -32,7 +32,7 @@ class Solver {
                 node.Domain.ExceptWith(initial.Rows[node.Row]);
                 node.Domain.ExceptWith(initial.Columns[node.Column]);
                 node.Domain.ExceptWith(initial.BlocksSet[node.Block]);
-                //DisplaySet(node.Domain);
+                DisplaySet(node.Domain);
                 }
         return initial;
     }
