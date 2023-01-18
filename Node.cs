@@ -6,6 +6,9 @@ class Node
     private int column;
     private int block;
     private List<int> domain;
+
+    private int domainCounter = 0;
+
     public Node()
     { 
     }
@@ -21,6 +24,13 @@ class Node
         get { return domain; }
         set { domain = value;  }
     }
+
+    public int DomainCounter
+    {
+        get { return domainCounter; }
+        set { domainCounter = value; }
+    }
+
 
     public int Number
     {

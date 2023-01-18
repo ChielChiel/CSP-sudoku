@@ -10,6 +10,9 @@ class Board
     public List<List<int>> blocks;
     List<List<int>> rows;
     List<List<int>> columns;
+
+    List<List<Node>> blocksSwappable;
+
     List<List<int>> blocksSet;
 
 
@@ -41,6 +44,12 @@ class Board
         get { return blocksSet; }
         set { blocksSet = value; }
     }
+
+    public List<List<int>> BlocksSwappable
+    {
+        get { return blocksSwappable; }
+        set { blocksSwappable = value; }
+    }    
 
     // Used for deepcloning the object
     public Board(Node[] sudoku_, Dictionary<string, int> evaluatie_waarden_, int evaluatie_, List<List<int>> blokken_) {
@@ -167,29 +176,34 @@ class Board
         {
             // Add meta information about a number in the sudoku.
             
-            Node number = new Node();
-            number.Swappable = (sudoku_array[i] == 0);
-            number.Number = sudoku_array[i];
+            Node cell = new Node();
+            cell.Swappable = (sudoku_array[i] == 0);
+            cell.Number = sudoku_array[i];
             
             Coordinate positie = GetCoordinate(i);
-            number.Row = positie.Y;
-            number.Column = positie.X;
+            cell.Row = positie.Y;
+            cell.Column = positie.X;
             int blockNumber = ((int)(positie.Y / 3) * 3) + (int)((positie.X) / 3);
-            number.Block = blockNumber;
+            cell.Block = blockNumber;
 
             if (sudoku_array[i] == 0)
             {
-                number.Domain = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9};
+                // cell is swappable
+                cell.Domain = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9};
+                this.blocksSwappable[cell.Block].Add(cell);
+
+
             }
             else
             {
+                // cell is not swappable
                 rows[positie.Y].Add(sudoku_array[i]);
                 columns[positie.X].Add(sudoku_array[i]);
-                blocksSet[blockNumber].Add(sudoku_array[i]);
+                blocksSet[cell.Block].Add(sudoku_array[i]);
                
             }
             this.Rows = rows;
-            board[i] = number;
+            board[i] = cell;
         }
         foreach (int e in blocksSet[0])
             Console.WriteLine(e);
