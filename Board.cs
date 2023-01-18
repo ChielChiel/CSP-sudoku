@@ -8,9 +8,9 @@ class Board
     public Dictionary<string, int> evaluationValues;
     public int Evaluation;
     public List<List<int>> blocks;
-    HashSet<int>[] rows;
-    HashSet<int>[] columns;
-    HashSet<int>[] blocksSet;
+    List<List<int>> rows;
+    List<List<int>> columns;
+    List<List<int>> blocksSet;
 
 
     //DeepClone creates an exact copy of the Board
@@ -25,18 +25,18 @@ class Board
         return clone;
     }
 
-    public HashSet<int>[] Rows
+    public List<List<int>> Rows
     {
         get { return rows; }
         set { rows = value; }
     }
-    public HashSet<int>[] Columns
+    public List<List<int>> Columns
     {
         get { return columns; }
         set { columns = value; }
     }
 
-    public HashSet<int>[] BlocksSet
+    public List<List<int>> BlocksSet
     {
         get { return blocksSet; }
         set { blocksSet = value; }
@@ -62,7 +62,7 @@ class Board
         this.Evaluation = this.CalculateEvaluatie();
 
         this.UpdateBlocks(onlySwappableNumbers: false);
-        this.fillSudoku();
+        //this.fillSudoku();
     }
 
     //returns from the flat array arrays with the indexes, sorted in blocks. FI: the numbers  [0, 1, 2, 9, 10, 11, 18, 19, 20] are in block 0
@@ -153,15 +153,15 @@ class Board
     public Node[] Create_Board(int[] sudoku_array) {
         Node[] board = new Node[sudoku_array.Length];
 
-        rows = new HashSet<int>[9];
-        columns = new HashSet<int>[9];
-        blocksSet = new HashSet<int>[9];
+        rows = new List<List<int>>();
+        columns = new List<List<int>>();
+        blocksSet = new List<List<int>>();
 
         for (int i = 0; i < 9; i++)
         {
-            rows[i] = new HashSet<int>();
-            columns[i] = new HashSet<int>();
-            blocksSet[i] = new HashSet<int>();
+            rows.Add(new List<int>());
+            columns.Add(new List<int>());
+            blocksSet.Add(new List<int>());
         }
         for (int i = 0; i < sudoku_array.Length; i++)
         {
@@ -179,7 +179,7 @@ class Board
 
             if (sudoku_array[i] == 0)
             {
-                number.Domain = new HashSet<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9};
+                number.Domain = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9};
             }
             else
             {
