@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Xml.Linq;
 
 
 class Solver {
@@ -32,6 +33,11 @@ class Solver {
                 node.Domain.ExceptWith(initial.Rows[node.Row]);
                 node.Domain.ExceptWith(initial.Columns[node.Column]);
                 node.Domain.ExceptWith(initial.BlocksSet[node.Block]);
+<<<<<<< Updated upstream
+=======
+                Console.Write($"{node.Row.ToString()}, ");
+                Console.Write(node.Column.ToString());
+>>>>>>> Stashed changes
                 DisplaySet(node.Domain);
                 }
         return initial;
@@ -39,6 +45,7 @@ class Solver {
 
     void DisplaySet(HashSet<int> set)
     {
+      
         Console.Write("{");
         foreach (int i in set)
         {

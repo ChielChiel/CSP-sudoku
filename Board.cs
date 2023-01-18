@@ -62,7 +62,7 @@ class Board
         this.Evaluation = this.CalculateEvaluatie();
 
         this.UpdateBlocks(onlySwappableNumbers: false);
-        this.fillSudoku();
+        //this.fillSudoku();
     }
 
     //returns from the flat array arrays with the indexes, sorted in blocks. FI: the numbers  [0, 1, 2, 9, 10, 11, 18, 19, 20] are in block 0
