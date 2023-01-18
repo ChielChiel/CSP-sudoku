@@ -12,7 +12,8 @@ class Board
     List<List<int>> columns;
 
     List<List<Node>> blocksSwappable;
-
+    List<List<Node>> rowsSwappable;
+    List<List<Node>> columnsSwappable;
     List<List<int>> blocksSet;
 
 
@@ -45,11 +46,21 @@ class Board
         set { blocksSet = value; }
     }
 
-    public List<List<int>> BlocksSwappable
+    public List<List<Node>> BlocksSwappable
     {
         get { return blocksSwappable; }
         set { blocksSwappable = value; }
-    }    
+    }
+    public List<List<Node>> RowsSwappable
+    {
+        get { return rowsSwappable; }
+        set { rowsSwappable = value; }
+    }
+    public List<List<Node>> ColumnsSwappable
+    {
+        get { return columnsSwappable; }
+        set { columnsSwappable = value; }
+    }
 
     // Used for deepcloning the object
     public Board(Node[] sudoku_, Dictionary<string, int> evaluatie_waarden_, int evaluatie_, List<List<int>> blokken_) {
@@ -191,7 +202,8 @@ class Board
                 // cell is swappable
                 cell.Domain = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9};
                 this.blocksSwappable[cell.Block].Add(cell);
-
+                this.rowsSwappable[cell.Row].Add(cell);
+                this.columnsSwappable[cell.Column].Add(cell);
 
             }
             else

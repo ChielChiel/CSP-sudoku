@@ -24,6 +24,7 @@ class Solver {
         result.Print();
     }
 
+    //Implementatie is nog niet optimaal, misschien delen weer terugvertalen naar een hashset voor meer snelheid?
     private Board NodeConsistency(Board initial)
     {
         
