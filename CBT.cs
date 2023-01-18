@@ -35,6 +35,7 @@ class CBT
         return true;
     }
 
+
     // Board FillValuesNodesWithDomain(Board sudoku)
     // {
 

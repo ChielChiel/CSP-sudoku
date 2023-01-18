@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Xml.Linq;
 
 
 class Solver {
@@ -23,22 +24,26 @@ class Solver {
         result.Print();
     }
 
+    //Implementatie is nog niet optimaal, misschien delen weer terugvertalen naar een hashset voor meer snelheid?
     private Board NodeConsistency(Board initial)
     {
         
         foreach (Node node in initial.sudoku)
             if (node.Swappable)   
-                {   
-                node.Domain.ExceptWith(initial.Rows[node.Row]);
-                node.Domain.ExceptWith(initial.Columns[node.Column]);
-                node.Domain.ExceptWith(initial.BlocksSet[node.Block]);
+                {
+                node.Domain = node.Domain.Except(initial.Rows[node.Row]).ToList();
+                node.Domain = node.Domain.Except(initial.Columns[node.Column]).ToList();
+                node.Domain = node.Domain.Except(initial.BlocksSet[node.Block]).ToList(); ;
+                Console.Write($"{node.Row.ToString()}, ");
+                Console.Write(node.Column.ToString());
                 DisplaySet(node.Domain);
                 }
         return initial;
     }
 
-    void DisplaySet(HashSet<int> set)
+    void DisplaySet(List<int> set)
     {
+      
         Console.Write("{");
         foreach (int i in set)
         {

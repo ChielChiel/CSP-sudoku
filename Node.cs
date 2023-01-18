@@ -5,7 +5,10 @@ class Node
     private int row;
     private int column;
     private int block;
-    private HashSet<int> domain;
+    private List<int> domain;
+
+    private int domainCounter = 0;
+
     public Node()
     { 
     }
@@ -16,11 +19,18 @@ class Node
         set { swappable = value; }
     }
 
-    public HashSet<int> Domain
+    public List<int> Domain
     {
         get { return domain; }
         set { domain = value;  }
     }
+
+    public int DomainCounter
+    {
+        get { return domainCounter; }
+        set { domainCounter = value; }
+    }
+
 
     public int Number
     {
