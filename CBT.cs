@@ -1,4 +1,6 @@
 
+using System.Diagnostics;
+
 class CBT
 {
 
@@ -9,14 +11,61 @@ class CBT
 
     public void CBTAlg(Board sudoku) 
     {
-        for (int i = 0; i < sudoku.sudoku.Count(); i++)
+        
+
+        //Deze counter doet het nu alleen voor de eerste waarde voor debugging purposes
+        for (int i = 0; i < 1; i++)
         {
             Node cell = sudoku.sudoku[i];
-
+            if (!cell.Swappable)
+            {
+                continue; 
+            }
             cell.Number = cell.Domain[0];
-            
-            
+            forwardChecking(cell, sudoku);
+            if (IsNotEmpty(sudoku))
+            {
+                //ga door
+            }
+            else
+            {
+                //backtrack
+            }
+            cell.DomainCounter++;
+            //recursief verder
 
+        }
+        Debug(sudoku);
+    }
+    private void Debug(Board sudoku)
+    {
+        Console.ReadLine();
+        sudoku.Print();
+        this.printDomains(sudoku);
+    }
+    private void printDomains(Board sudoku)
+    {
+        foreach (Node cell in sudoku.sudoku)
+        {
+            if (cell.Swappable)
+                Solver.DisplaySet(cell.Domain);
+        }
+    }
+    
+
+    private void forwardChecking(Node cell, Board sudoku)
+    {
+        foreach (Node effected in sudoku.RowsSwappable[cell.Row])
+        {
+            effected.Domain.Remove(cell.Number);
+        }
+        foreach (Node effected in sudoku.ColumnsSwappable[cell.Column])
+        {
+            effected.Domain.Remove(cell.Number);
+        }
+        foreach (Node effected in sudoku.BlocksSwappable[cell.Block])
+        {
+            effected.Domain.Remove(cell.Number);
         }
     }
 
@@ -26,13 +75,17 @@ class CBT
         Node[] sud = sudoku.sudoku;
         foreach (Node node in sud)
         {
-            if(node.Domain.Count() == 0)
+            if (node.Swappable)
             {
-                return false;
+                if (node.Domain.Count() == 0)
+                {
+                    return false;
+                }
             }
         }
         return true;
     }
+
 
     // Board FillValuesNodesWithDomain(Board sudoku)
     // {

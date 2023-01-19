@@ -176,12 +176,18 @@ class Board
         rows = new List<List<int>>();
         columns = new List<List<int>>();
         blocksSet = new List<List<int>>();
+        blocksSwappable = new List<List<Node>>();
+        rowsSwappable = new List<List<Node>>();
+        columnsSwappable = new List<List<Node>>();
 
         for (int i = 0; i < 9; i++)
         {
             rows.Add(new List<int>());
             columns.Add(new List<int>());
             blocksSet.Add(new List<int>());
+            blocksSwappable.Add(new List<Node>());
+            rowsSwappable.Add(new List<Node>());
+            columnsSwappable.Add(new List<Node>());
         }
         for (int i = 0; i < sudoku_array.Length; i++)
         {

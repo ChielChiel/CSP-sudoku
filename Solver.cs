@@ -14,14 +14,15 @@ class Solver {
         // We will have to vary these parameters to see what works best to get the best result overall.
         initial.Print();
         Board consistent = this.NodeConsistency(initial);
-        Board result = this.CBT(consistent);
+        CBT cBT = new CBT();
+        cBT.CBTAlg(consistent);
         stopWatch.Stop();
 
         TimeSpan diff = stopWatch.Elapsed;
 
         Console.WriteLine("This problem took: " + diff.TotalSeconds + " seconds to complete");
-        Console.WriteLine("The final state, with evaluation value " + result.Evaluation + " being: ");
-        result.Print();
+        //Console.WriteLine("The final state, with evaluation value " + result.Evaluation + " being: ");
+        //result.Print();
     }
 
     //Implementatie is nog niet optimaal, misschien delen weer terugvertalen naar een hashset voor meer snelheid?
@@ -41,7 +42,7 @@ class Solver {
         return initial;
     }
 
-    void DisplaySet(List<int> set)
+    public static void DisplaySet(List<int> set)
     {
       
         Console.Write("{");
@@ -52,10 +53,7 @@ class Solver {
         Console.WriteLine(" }");
     }
 
-    public Board CBT(Board board)
-    {
-        return board;
-    }
+  
 
    
 }
