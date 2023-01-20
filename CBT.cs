@@ -12,49 +12,55 @@ class CBT
 
     public void CBTAlg(Board sudoku, int index = 0) 
     {
-        
+
 
         //Deze counter doet het nu alleen voor de eerste waarde voor debugging purposes
-        for (int i = 0; i < sudoku.sudoku.Length; i++)
+
+        // Console.ReadLine();
+        Debug(sudoku);
+        if (index > sudoku.sudoku.Length)
         {
-            // Console.ReadLine();
-            Node cell = sudoku.sudoku[i];
-            if (!cell.Swappable)
-            {
-                continue; 
-            }
+            return;
+        }
+        Node cell = sudoku.sudoku[index];
+        if (!cell.Swappable)
+        {
+            this.CBTAlg(sudoku: sudoku, index: index + 1);
+        }
 
+        cell.DomainCounter += 1;
+
+        cell.Number = cell.Domain[cell.DomainCounter];
             
-            cell.DomainCounter += 1;
-            cell.Number = cell.Domain[cell.DomainCounter];
-            this.forwardChecking(cell, sudoku);
-            if (!IsNotEmpty(sudoku))
+        this.forwardChecking(cell, sudoku);
+        if (IsNotEmpty(sudoku))
+        {
+            //ga door
+            this.CBTAlg(sudoku: sudoku, index: index + 1);
+
+
+        }
+        else
+        {
+            //backtrack
+            if(cell.DomainCounter >= cell.Domain.Count())
             {
-                //ga door
-                this.CBTAlg(sudoku: sudoku, index: index + 1);
-
-
+                // Backtrack(index--)
+                Console.WriteLine("backtrack");
+                this.BackTrack(sudoku: sudoku, cellIndex: index);
             }
             else
             {
-                //backtrack
-                if(cell.DomainCounter >= cell.Domain.Count())
-                {
-                    // Backtrack(index--)
-                    this.BackTrack(sudoku: sudoku, cellIndex: index);
-                }
-                else
-                {
-                    // Undo
-                    this.CBTAlg(sudoku: sudoku, index: index);
-                }
-
+                // Undo
+                this.CBTAlg(sudoku: sudoku, index: index);
             }
-            // cell.DomainCounter++;
-            //recursief verder
 
         }
-        Debug(sudoku);
+        // cell.DomainCounter++;
+        //recursief verder
+
+        
+        
     }
 
 
@@ -95,19 +101,29 @@ class CBT
     private void undoDomainUpdate(Board sudoku, Node cell)
     {
         cell.DomainCounter = cell.DomainCounter - 1;
-        cell.Number = 0;
+       
         foreach (Node effected in sudoku.RowsSwappable[cell.Row])
         {
-            effected.Domain.Add(cell.Number);
+            if (!effected.Domain.Contains(cell.Number))
+            {
+                effected.Domain.Add(cell.Number);
+            }
         }
         foreach (Node effected in sudoku.ColumnsSwappable[cell.Column])
         {
-            effected.Domain.Add(cell.Number);
+            if (!effected.Domain.Contains(cell.Number))
+            {
+                effected.Domain.Add(cell.Number);
+            }
         }
         foreach (Node effected in sudoku.BlocksSwappable[cell.Block])
         {
-            effected.Domain.Add(cell.Number);
+            if (!effected.Domain.Contains(cell.Number))
+            {
+                effected.Domain.Add(cell.Number);
+            }
         }
+        cell.Number = 0;
     }
     private void forwardChecking(Node cell, Board sudoku)
     {
