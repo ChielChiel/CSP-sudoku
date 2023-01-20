@@ -14,7 +14,7 @@ class CBT
         
 
         //Deze counter doet het nu alleen voor de eerste waarde voor debugging purposes
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < sudoku.sudoku.Length; i++)
         {
             Node cell = sudoku.sudoku[i];
             if (!cell.Swappable)
@@ -26,7 +26,7 @@ class CBT
             cell.DomainCounter += 1;
             cell.Number = cell.Domain[cell.DomainCounter];
             forwardChecking(cell, sudoku);
-            if (IsNotEmpty(sudoku))
+            if (!IsNotEmpty(sudoku))
             {
                 //ga door
                 CBTAlg(sudoku: sudoku, index: index + 1);
@@ -77,8 +77,22 @@ class CBT
                 Solver.DisplaySet(cell.Domain);
         }
     }
-    
 
+    private void undoDomainUpdate(Board sudoku, Node cell)
+    {
+        foreach (Node effected in sudoku.RowsSwappable[cell.Row])
+        {
+            effected.Domain.Add(cell.Number);
+        }
+        foreach (Node effected in sudoku.ColumnsSwappable[cell.Column])
+        {
+            effected.Domain.Add(cell.Number);
+        }
+        foreach (Node effected in sudoku.BlocksSwappable[cell.Block])
+        {
+            effected.Domain.Add(cell.Number);
+        }
+    }
     private void forwardChecking(Node cell, Board sudoku)
     {
         foreach (Node effected in sudoku.RowsSwappable[cell.Row])
