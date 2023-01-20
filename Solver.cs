@@ -13,10 +13,17 @@ class Solver {
 
         // We will have to vary these parameters to see what works best to get the best result overall.
         initial.Print();
+        
         Board consistent = this.NodeConsistency(initial);
+        
         CBT cBT = new CBT();
+        
         cBT.CBTAlg(consistent);
+        
         stopWatch.Stop();
+
+
+
 
         TimeSpan diff = stopWatch.Elapsed;
 

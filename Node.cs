@@ -7,7 +7,7 @@ class Node
     private int block;
     private List<int> domain;
 
-    private int domainCounter = 0;
+    private int domainCounter = -1;
 
     public Node()
     { 

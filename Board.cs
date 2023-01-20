@@ -8,13 +8,13 @@ class Board
     public Dictionary<string, int> evaluationValues;
     public int Evaluation;
     public List<List<int>> blocks;
-    List<List<int>> rows;
-    List<List<int>> columns;
+    public List<List<int>> rows;
+    public List<List<int>> columns;
 
-    List<List<Node>> blocksSwappable;
-    List<List<Node>> rowsSwappable;
-    List<List<Node>> columnsSwappable;
-    List<List<int>> blocksSet;
+    public List<List<Node>> blocksSwappable;
+    public List<List<Node>> rowsSwappable;
+    public List<List<Node>> columnsSwappable;
+    public List<List<int>> blocksSet;
 
 
     //DeepClone creates an exact copy of the Board

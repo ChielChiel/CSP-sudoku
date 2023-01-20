@@ -4,10 +4,11 @@ using System.Diagnostics;
 class CBT
 {
 
-    public void CBT()
-    {
-        Console.WriteLine("kaas");
-    }
+    // public void CBTs(string input)
+    // {
+    //     Console.WriteLine("kaas");
+
+    // }
 
     public void CBTAlg(Board sudoku, int index = 0) 
     {
@@ -16,6 +17,7 @@ class CBT
         //Deze counter doet het nu alleen voor de eerste waarde voor debugging purposes
         for (int i = 0; i < sudoku.sudoku.Length; i++)
         {
+            // Console.ReadLine();
             Node cell = sudoku.sudoku[i];
             if (!cell.Swappable)
             {
@@ -25,11 +27,11 @@ class CBT
             
             cell.DomainCounter += 1;
             cell.Number = cell.Domain[cell.DomainCounter];
-            forwardChecking(cell, sudoku);
+            this.forwardChecking(cell, sudoku);
             if (!IsNotEmpty(sudoku))
             {
                 //ga door
-                CBTAlg(sudoku: sudoku, index: index + 1);
+                this.CBTAlg(sudoku: sudoku, index: index + 1);
 
 
             }
@@ -38,13 +40,13 @@ class CBT
                 //backtrack
                 if(cell.DomainCounter >= cell.Domain.Count())
                 {
-                    // Undo
                     // Backtrack(index--)
+                    this.BackTrack(sudoku: sudoku, cellIndex: index);
                 }
                 else
                 {
                     // Undo
-                    cell.DomainCounter =+ 1;
+                    this.CBTAlg(sudoku: sudoku, index: index);
                 }
 
             }
@@ -56,10 +58,22 @@ class CBT
     }
 
 
-    void BackTrack(int cellIndex = 0)
+    void BackTrack(Board sudoku, int cellIndex = 0)
     {
         // Undo
-        
+        Node cell = sudoku.sudoku[cellIndex];
+        this.undoDomainUpdate(sudoku: sudoku, cell: cell);
+        if(cell.DomainCounter == cell.Domain.Count())
+        {
+            int backTrackCellIndex = cellIndex - 1;
+            cell.DomainCounter = -1;
+            this.BackTrack(sudoku, backTrackCellIndex);
+        }
+        else
+        {
+            this.CBTAlg(sudoku: sudoku, index: cellIndex);
+        }
+
     }
 
 
@@ -80,6 +94,8 @@ class CBT
 
     private void undoDomainUpdate(Board sudoku, Node cell)
     {
+        cell.DomainCounter = cell.DomainCounter - 1;
+        cell.Number = 0;
         foreach (Node effected in sudoku.RowsSwappable[cell.Row])
         {
             effected.Domain.Add(cell.Number);
