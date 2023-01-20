@@ -58,6 +58,7 @@ class Solver {
             Console.Write(" {0}", i);
         }
         Console.WriteLine(" }");
+        
     }
 
   
