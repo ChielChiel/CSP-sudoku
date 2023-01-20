@@ -4,12 +4,12 @@ using System.Diagnostics;
 class CBT
 {
 
-    // public void CBT()
-    // {
-    //     Console.WriteLine("kaas");
-    // }
+    public void CBT()
+    {
+        Console.WriteLine("kaas");
+    }
 
-    public void CBTAlg(Board sudoku) 
+    public void CBTAlg(Board sudoku, int index = 0) 
     {
         
 
@@ -21,22 +21,48 @@ class CBT
             {
                 continue; 
             }
-            cell.Number = cell.Domain[0];
+
+            
+            cell.DomainCounter += 1;
+            cell.Number = cell.Domain[cell.DomainCounter];
             forwardChecking(cell, sudoku);
             if (IsNotEmpty(sudoku))
             {
                 //ga door
+                CBTAlg(sudoku: sudoku, index: index + 1);
+
+
             }
             else
             {
                 //backtrack
+                if(cell.DomainCounter >= cell.Domain.Count())
+                {
+                    // Undo
+                    // Backtrack(index--)
+                }
+                else
+                {
+                    // Undo
+                    cell.DomainCounter =+ 1;
+                }
+
             }
-            cell.DomainCounter++;
+            // cell.DomainCounter++;
             //recursief verder
 
         }
         Debug(sudoku);
     }
+
+
+    void BackTrack(int cellIndex = 0)
+    {
+        // Undo
+        
+    }
+
+
     private void Debug(Board sudoku)
     {
         Console.ReadLine();
