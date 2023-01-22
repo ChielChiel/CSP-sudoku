@@ -17,25 +17,28 @@ class CBT
         //Deze counter doet het nu alleen voor de eerste waarde voor debugging purposes
 
         // Console.ReadLine();
-        if (index >= sudoku.sudoku.Length || Done)
+        if (index >= sudoku.sudoku.Length)
         {
-            Done = true;
             Console.WriteLine("we're done here");
             sudoku.Print();
             return sudoku;
         }
 
         Node cell = sudoku.sudoku[index];
+       
         if (!cell.Swappable)
         {
             this.CBTAlg(sudoku: sudoku, index: index + 1);
         }
+
         
 
         cell.DomainCounter += 1;
-
-        cell.Number = cell.Domain[cell.DomainCounter];
-        //Debug(sudoku);
+        if (cell.Domain != null)
+        {
+            cell.Number = cell.Domain[cell.DomainCounter];
+        }
+       // Debug(sudoku);
 
         this.forwardChecking(cell, sudoku);
         if (IsNotEmpty(sudoku))
@@ -51,7 +54,6 @@ class CBT
             if(cell.DomainCounter >= (cell.Domain.Count()-1))
             {
                 // Backtrack(index--)
-                Console.WriteLine("backtrack");
                 this.BackTrack(sudoku: sudoku, cellIndex: index);
             }
             else
@@ -63,16 +65,16 @@ class CBT
         }
         return sudoku;
         
-        
     }
 
 
     void BackTrack(Board sudoku, int cellIndex = 0)
     {
         // Undo
-        
+
         
         Node cell = sudoku.sudoku[cellIndex];
+        
         if (!cell.Swappable)
         {
             int backTrackCellIndex = cellIndex - 1;
@@ -84,14 +86,14 @@ class CBT
             int backTrackCellIndex = cellIndex - 1;
             cell.DomainCounter = -1;
             cell.Number = 0;
-            //Debug(sudoku);
+           
             this.BackTrack(sudoku, backTrackCellIndex);
         }
         else
         {
             this.CBTAlg(sudoku: sudoku, index: cellIndex);
         }
-
+        return;
     }
 
 
@@ -106,8 +108,10 @@ class CBT
     {
         foreach (Node cell in sudoku.sudoku)
         {
+            
             if (cell.Swappable)
             {
+                
                 Console.Write("DC: " + cell.DomainCounter.ToString());
                 Solver.DisplaySet(cell.Domain);
                 
@@ -124,24 +128,29 @@ class CBT
             if (!effected.Domain.Contains(cell.Number))
             {
                 effected.Domain.Add(cell.Number);
+                
             }
             effected.Domain.Sort();
         }
-        
+
+        cell.EffectedCells.Clear();
     }
     private void forwardChecking(Node cell, Board sudoku)
     {
         foreach (Node effected in sudoku.RowsSwappable[cell.Row])
         {
-            if (effected != cell && effected.Domain.Contains(cell.Number))
+            
+            if (effected != cell && effected.Domain.Contains(cell.Number) && !cell.EffectedCells.Contains(effected))
             {
+                
                 cell.EffectedCells.Add(effected);
                 effected.Domain.Remove(cell.Number);
             }
+            
         }
         foreach (Node effected in sudoku.ColumnsSwappable[cell.Column])
         {
-            if (effected != cell && effected.Domain.Contains(cell.Number))
+            if (effected != cell && effected.Domain.Contains(cell.Number) && !cell.EffectedCells.Contains(effected))
             {
                 cell.EffectedCells.Add(effected);
                 effected.Domain.Remove(cell.Number);
@@ -149,8 +158,11 @@ class CBT
         }
         foreach (Node effected in sudoku.BlocksSwappable[cell.Block])
         {
-            if (effected != cell && effected.Domain.Contains(cell.Number))
+           
+            if (effected != cell && effected.Domain.Contains(cell.Number) && !cell.EffectedCells.Contains(effected))
             {
+                if (effected.Row == 4 && effected.Column == 6)
+                { }
                 cell.EffectedCells.Add(effected);
                 effected.Domain.Remove(cell.Number);
             }

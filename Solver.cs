@@ -40,6 +40,7 @@ class Solver {
         foreach (Node node in initial.sudoku)
             if (node.Swappable)   
                 {
+                
                 node.Domain = node.Domain.Except(initial.Rows[node.Row]).ToList();
                 node.Domain = node.Domain.Except(initial.Columns[node.Column]).ToList();
                 node.Domain = node.Domain.Except(initial.BlocksSet[node.Block]).ToList(); ;
