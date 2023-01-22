@@ -202,7 +202,7 @@ class Board
             cell.Column = positie.X;
             int blockNumber = ((int)(positie.Y / 3) * 3) + (int)((positie.X) / 3);
             cell.Block = blockNumber;
-
+            cell.EffectedCells = new List<Node>();
             if (sudoku_array[i] == 0)
             {
                 // cell is swappable

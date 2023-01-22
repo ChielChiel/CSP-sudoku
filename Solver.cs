@@ -18,8 +18,9 @@ class Solver {
         
         CBT cBT = new CBT();
         
-        cBT.CBTAlg(consistent);
+        Board antwoord = cBT.CBTAlg(consistent);
         
+        antwoord.Print();
         stopWatch.Stop();
 
 

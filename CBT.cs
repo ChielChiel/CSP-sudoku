@@ -9,19 +9,22 @@ class CBT
     //     Console.WriteLine("kaas");
 
     // }
-
-    public void CBTAlg(Board sudoku, int index = 0) 
+    public bool Done = false;
+    public Board CBTAlg(Board sudoku, int index = 0) 
     {
 
 
         //Deze counter doet het nu alleen voor de eerste waarde voor debugging purposes
 
         // Console.ReadLine();
-        
-        if (index > sudoku.sudoku.Length)
+        if (index >= sudoku.sudoku.Length || Done)
         {
-            return;
+            Done = true;
+            Console.WriteLine("we're done here");
+            sudoku.Print();
+            return sudoku;
         }
+
         Node cell = sudoku.sudoku[index];
         if (!cell.Swappable)
         {
@@ -32,7 +35,7 @@ class CBT
         cell.DomainCounter += 1;
 
         cell.Number = cell.Domain[cell.DomainCounter];
-        Debug(sudoku);
+        //Debug(sudoku);
 
         this.forwardChecking(cell, sudoku);
         if (IsNotEmpty(sudoku))
@@ -45,7 +48,7 @@ class CBT
         else
         {
             //backtrack
-            if(cell.DomainCounter >= cell.Domain.Count())
+            if(cell.DomainCounter >= (cell.Domain.Count()-1))
             {
                 // Backtrack(index--)
                 Console.WriteLine("backtrack");
@@ -58,9 +61,7 @@ class CBT
             }
 
         }
-        // cell.DomainCounter++;
-        //recursief verder
-
+        return sudoku;
         
         
     }
@@ -69,12 +70,21 @@ class CBT
     void BackTrack(Board sudoku, int cellIndex = 0)
     {
         // Undo
+        
+        
         Node cell = sudoku.sudoku[cellIndex];
+        if (!cell.Swappable)
+        {
+            int backTrackCellIndex = cellIndex - 1;
+            this.BackTrack(sudoku, backTrackCellIndex);
+        }
         this.undoDomainUpdate(sudoku: sudoku, cell: cell);
-        if(cell.DomainCounter == cell.Domain.Count())
+        if(cell.DomainCounter == (cell.Domain.Count()-1))
         {
             int backTrackCellIndex = cellIndex - 1;
             cell.DomainCounter = -1;
+            cell.Number = 0;
+            //Debug(sudoku);
             this.BackTrack(sudoku, backTrackCellIndex);
         }
         else
@@ -109,23 +119,7 @@ class CBT
     {
         //cell.DomainCounter = cell.DomainCounter - 1;
        
-        foreach (Node effected in sudoku.RowsSwappable[cell.Row])
-        {
-            if (!effected.Domain.Contains(cell.Number))
-            {
-                effected.Domain.Add(cell.Number);
-            }
-            effected.Domain.Sort();
-        }
-        foreach (Node effected in sudoku.ColumnsSwappable[cell.Column])
-        {
-            if (!effected.Domain.Contains(cell.Number))
-            {
-                effected.Domain.Add(cell.Number);
-            }
-            effected.Domain.Sort();
-        }
-        foreach (Node effected in sudoku.BlocksSwappable[cell.Block])
+        foreach (Node effected in cell.EffectedCells)
         {
             if (!effected.Domain.Contains(cell.Number))
             {
@@ -134,28 +128,30 @@ class CBT
             effected.Domain.Sort();
         }
         
-        cell.Number = 0;
     }
     private void forwardChecking(Node cell, Board sudoku)
     {
         foreach (Node effected in sudoku.RowsSwappable[cell.Row])
         {
-            if (effected != cell)
+            if (effected != cell && effected.Domain.Contains(cell.Number))
             {
+                cell.EffectedCells.Add(effected);
                 effected.Domain.Remove(cell.Number);
             }
         }
         foreach (Node effected in sudoku.ColumnsSwappable[cell.Column])
         {
-            if (effected != cell)
+            if (effected != cell && effected.Domain.Contains(cell.Number))
             {
+                cell.EffectedCells.Add(effected);
                 effected.Domain.Remove(cell.Number);
             }
         }
         foreach (Node effected in sudoku.BlocksSwappable[cell.Block])
         {
-            if (effected != cell)
+            if (effected != cell && effected.Domain.Contains(cell.Number))
             {
+                cell.EffectedCells.Add(effected);
                 effected.Domain.Remove(cell.Number);
             }
         }
