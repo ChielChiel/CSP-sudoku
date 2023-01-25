@@ -6,8 +6,9 @@ class Node
     private int column;
     private int block;
     private List<int> domain;
+    private List<Node> effectedCells;
 
-    private int domainCounter = 0;
+    private int domainCounter = -1;
 
     public Node()
     { 
@@ -23,6 +24,11 @@ class Node
     {
         get { return domain; }
         set { domain = value;  }
+    }
+    public List<Node> EffectedCells
+    {
+        get { return effectedCells; }
+        set { effectedCells = value; }
     }
 
     public int DomainCounter

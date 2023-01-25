@@ -4,6 +4,7 @@ using System.Xml.Linq;
 
 class Solver {
 
+    private Board Solution;
     public Solver(Board initial) {
         initial.CalculateEvaluatie();
 
@@ -13,16 +14,30 @@ class Solver {
 
         // We will have to vary these parameters to see what works best to get the best result overall.
         initial.Print();
+        
         Board consistent = this.NodeConsistency(initial);
+        
         CBT cBT = new CBT();
-        cBT.CBTAlg(consistent);
+        
+        Board antwoord = cBT.CBTAlg(consistent);
+        this.Solution = antwoord;
+        Console.WriteLine("klaartjs");
+        antwoord.Print();
         stopWatch.Stop();
+
+
+
 
         TimeSpan diff = stopWatch.Elapsed;
 
         Console.WriteLine("This problem took: " + diff.TotalSeconds + " seconds to complete");
         //Console.WriteLine("The final state, with evaluation value " + result.Evaluation + " being: ");
         //result.Print();
+    }
+
+    public Board GetSolution()
+    {
+        return this.Solution;
     }
 
     //Implementatie is nog niet optimaal, misschien delen weer terugvertalen naar een hashset voor meer snelheid?
@@ -32,6 +47,7 @@ class Solver {
         foreach (Node node in initial.sudoku)
             if (node.Swappable)   
                 {
+                
                 node.Domain = node.Domain.Except(initial.Rows[node.Row]).ToList();
                 node.Domain = node.Domain.Except(initial.Columns[node.Column]).ToList();
                 node.Domain = node.Domain.Except(initial.BlocksSet[node.Block]).ToList(); ;
@@ -51,6 +67,7 @@ class Solver {
             Console.Write(" {0}", i);
         }
         Console.WriteLine(" }");
+        
     }
 
   
