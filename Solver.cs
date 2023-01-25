@@ -31,8 +31,6 @@ class Solver {
         TimeSpan diff = stopWatch.Elapsed;
 
         Console.WriteLine("This problem took: " + diff.TotalSeconds + " seconds to complete");
-        //Console.WriteLine("The final state, with evaluation value " + result.Evaluation + " being: ");
-        //result.Print();
     }
 
     public Board GetSolution()
@@ -40,7 +38,8 @@ class Solver {
         return this.Solution;
     }
 
-    //Implementatie is nog niet optimaal, misschien delen weer terugvertalen naar een hashset voor meer snelheid?
+
+    //NodeConsistency makes the initial board nodeconsistent: every node has an updated domain that takes the unswappable origininal numbers into account
     private Board NodeConsistency(Board initial)
     {
         
@@ -58,6 +57,7 @@ class Solver {
         return initial;
     }
 
+    //DisplaySet is a small method for debugging, it prints the list 
     public static void DisplaySet(List<int> set)
     {
       
