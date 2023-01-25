@@ -4,6 +4,7 @@ using System.Xml.Linq;
 
 class Solver {
 
+    private Board Solution;
     public Solver(Board initial) {
         initial.CalculateEvaluatie();
 
@@ -19,7 +20,8 @@ class Solver {
         CBT cBT = new CBT();
         
         Board antwoord = cBT.CBTAlg(consistent);
-        
+        this.Solution = antwoord;
+        Console.WriteLine("klaartjs");
         antwoord.Print();
         stopWatch.Stop();
 
@@ -31,6 +33,11 @@ class Solver {
         Console.WriteLine("This problem took: " + diff.TotalSeconds + " seconds to complete");
         //Console.WriteLine("The final state, with evaluation value " + result.Evaluation + " being: ");
         //result.Print();
+    }
+
+    public Board GetSolution()
+    {
+        return this.Solution;
     }
 
     //Implementatie is nog niet optimaal, misschien delen weer terugvertalen naar een hashset voor meer snelheid?

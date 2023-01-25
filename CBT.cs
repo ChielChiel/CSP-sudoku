@@ -1,26 +1,13 @@
-
-using System.Diagnostics;
-
 class CBT
 {
 
-    // public void CBTs(string input)
-    // {
-    //     Console.WriteLine("kaas");
-
-    // }
-    public bool Done = false;
+    public bool isFinished = false;
     public Board CBTAlg(Board sudoku, int index = 0) 
     {
-
-
-        //Deze counter doet het nu alleen voor de eerste waarde voor debugging purposes
-
-        // Console.ReadLine();
         if (index >= sudoku.sudoku.Length)
         {
-            Console.WriteLine("we're done here");
             sudoku.Print();
+            this.isFinished = true;
             return sudoku;
         }
 
@@ -37,10 +24,8 @@ class CBT
         if (cell.Domain != null)
         {
             cell.Number = cell.Domain[cell.DomainCounter];
-        }
-       // Debug(sudoku);
-
-        this.forwardChecking(cell, sudoku);
+        
+            this.forwardChecking(cell, sudoku);
         if (IsNotEmpty(sudoku))
         {
             //ga door
@@ -63,16 +48,15 @@ class CBT
             }
 
         }
+        
+        }
         return sudoku;
         
     }
 
 
     void BackTrack(Board sudoku, int cellIndex = 0)
-    {
-        // Undo
-
-        
+    {        
         Node cell = sudoku.sudoku[cellIndex];
         
         if (!cell.Swappable)
@@ -81,17 +65,19 @@ class CBT
             this.BackTrack(sudoku, backTrackCellIndex);
         }
         this.undoDomainUpdate(sudoku: sudoku, cell: cell);
-        if(cell.DomainCounter == (cell.Domain.Count()-1))
-        {
-            int backTrackCellIndex = cellIndex - 1;
-            cell.DomainCounter = -1;
-            cell.Number = 0;
-           
-            this.BackTrack(sudoku, backTrackCellIndex);
-        }
-        else
-        {
-            this.CBTAlg(sudoku: sudoku, index: cellIndex);
+        if(!this.isFinished) {
+            if(cell.DomainCounter == (cell.Domain.Count()-1))
+            {
+                int backTrackCellIndex = cellIndex - 1;
+                cell.DomainCounter = -1;
+                cell.Number = 0;
+            
+                this.BackTrack(sudoku, backTrackCellIndex);
+            }
+            else
+            {
+                this.CBTAlg(sudoku: sudoku, index: cellIndex);
+            }
         }
         return;
     }
@@ -121,8 +107,6 @@ class CBT
 
     private void undoDomainUpdate(Board sudoku, Node cell)
     {
-        //cell.DomainCounter = cell.DomainCounter - 1;
-       
         foreach (Node effected in cell.EffectedCells)
         {
             if (!effected.Domain.Contains(cell.Number))
@@ -137,12 +121,11 @@ class CBT
     }
     private void forwardChecking(Node cell, Board sudoku)
     {
-        foreach (Node effected in sudoku.RowsSwappable[cell.Row])
+       foreach (Node effected in sudoku.RowsSwappable[cell.Row])
         {
             
             if (effected != cell && effected.Domain.Contains(cell.Number) && !cell.EffectedCells.Contains(effected))
             {
-                
                 cell.EffectedCells.Add(effected);
                 effected.Domain.Remove(cell.Number);
             }
@@ -161,8 +144,6 @@ class CBT
            
             if (effected != cell && effected.Domain.Contains(cell.Number) && !cell.EffectedCells.Contains(effected))
             {
-                if (effected.Row == 4 && effected.Column == 6)
-                { }
                 cell.EffectedCells.Add(effected);
                 effected.Domain.Remove(cell.Number);
             }
@@ -171,7 +152,6 @@ class CBT
 
     bool IsNotEmpty(Board sudoku)
     {
-        // Niks mag leeg zijn
         Node[] sud = sudoku.sudoku;
         foreach (Node node in sud)
         {
@@ -186,75 +166,4 @@ class CBT
         return true;
     }
 
-
-    // Board FillValuesNodesWithDomain(Board sudoku)
-    // {
-    //     return new Board();
-    // }
-
-
-
-    /*
-    // knoop consistent maken door middel van de code van node consistency
-    nodeConsistency()
-    {
-
-    }
-
-    // beginnen met de eerste cel en doorwerken tot nummer 81
-    functie CBT()
-    {   
-        huidigeCel = variabel
-
-        // beginnen met algoritme door cellen te vullen
-        if (waarde huidigeCel leeg)
-        {
-            waarde huidigeCel = waarde uit domein van huidigeCel op basis van domeincounter 
-            forwardChecking()
-        }
-        else
-        {
-            if (partialSolution())
-                ga naar volgende cel (huidigeCel +1)
-            else
-            {
-                maak waarde huidigeCel leeg
-                plaats waarde terug in omliggende domeinen (rij kolom en box)
-                if (domein counter+1 > grootte van het domein) // oftewel hij overschreidt de grootte
-                    zet domein counter op 0 oftewel beginpositie
-                    spring een cel terug (huidigeCel -1)
-                else
-                    domeincounter++ 
-            }
-        }
-    }
-
-    forwardChecking()
-    {
-        for(in elke rij kolom en box van deze cel, de waarde verwijderen uit het domein)
-        {
-            if (waarde in domein)
-                verwijder waarde uit domein
-        }
-    }
-
-    bool partialSolution()
-    {
-        // controleren of een domein leeg is of niet. (mogelijk dit niet de beste locatie hiervoor, maar voor overzicht)
-        for(in elke rij kolom en box van deze cel, de waarde verwijderen uit het domein)
-        {
-            if (domein leeg of geen partiele oplossing) // domein is leeg oftewel er is een fout gemaakt
-            {
-                return false
-            }
-            else // domein niet leeg, dus gaat nog goed
-            {
-
-            }
-        }
-        
-        return true
-    }
-
-    */
 }
