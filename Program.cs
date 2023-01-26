@@ -1,14 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-
-namespace sudoku
+﻿namespace sudoku
 {
     class Progrm
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("\x1b[1mHill climb sudoku solver\x1b[0m");
+            Console.WriteLine("\x1b[1mCBT sudoku solver\x1b[0m");
             
             string path_to_file;
             if(args.Length > 0)
@@ -26,12 +22,14 @@ namespace sudoku
             int number_of_sudokus = all_sudokus.GetLength(0);
             Board sudoku;
             for (int i = 0; i < number_of_sudokus; i++)
-            // for (int i = 0; i < 2; i++)
             {
                 Console.WriteLine($"\n\x1b[1mSudoku number: {i + 1}\x1b[0m");
                 sudoku = new Board(all_sudokus.GetRow(i));
-                Solver oplosser = new Solver(sudoku);
-                Board oplossing = oplosser.GetSolution();
+                
+                Solver solver = new Solver(sudoku);
+                Board solution = solver.GetSolution();
+                Console.WriteLine("This problem took: " + solver.GetRunTime() + " seconds to complete. The following board is the solution:");
+                solution.Print();
             }
         }
     }

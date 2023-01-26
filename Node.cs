@@ -10,9 +10,7 @@ class Node
 
     private int domainCounter = -1;
 
-    public Node()
-    { 
-    }
+    public Node() { }
 
     public bool Swappable
     {
