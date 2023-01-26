@@ -29,7 +29,8 @@ class Solver {
         return this.Runtime;
     }
 
-    //Implementatie is nog niet optimaal, misschien delen weer terugvertalen naar een hashset voor meer snelheid?
+
+    //NodeConsistency makes the initial board nodeconsistent: every node has an updated domain that takes the unswappable origininal numbers into account
     private Board NodeConsistency(Board initial)
     {
         foreach (Node node in initial.sudoku)
@@ -43,6 +44,7 @@ class Solver {
         return initial;
     }
 
+    //DisplaySet is a small method for debugging, it prints the list 
     public static void DisplaySet(List<int> set)
     {
         Console.Write("{");
