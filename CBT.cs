@@ -2,11 +2,11 @@ class CBT
 {
 
     public bool isFinished = false;
+    
     public Board CBTAlg(Board sudoku, int index = 0) 
     {
         if (index >= sudoku.sudoku.Length)
         {
-            // sudoku.Print();
             this.isFinished = true;
             return sudoku;
         }
@@ -17,38 +17,33 @@ class CBT
         {
             this.CBTAlg(sudoku: sudoku, index: index + 1);
         }
-
-        
-
+  
         cell.DomainCounter += 1;
+  
         if (cell.Domain != null)
         {
             cell.Number = cell.Domain[cell.DomainCounter];
         
             this.forwardChecking(cell, sudoku);
-        if (IsNotEmpty(sudoku))
-        {
-            //ga door
-            this.CBTAlg(sudoku: sudoku, index: index + 1);
-
-
-        }
-        else
-        {
-            //backtrack
-            if(cell.DomainCounter >= (cell.Domain.Count()-1))
+            if (IsNotEmpty(sudoku))
             {
-                // Backtrack(index--)
-                this.BackTrack(sudoku: sudoku, cellIndex: index);
+                //ga door
+                this.CBTAlg(sudoku: sudoku, index: index + 1);
             }
             else
             {
-                this.undoDomainUpdate(sudoku: sudoku, cell: cell);
-                this.CBTAlg(sudoku: sudoku, index: index);
+                //backtrack
+                if(cell.DomainCounter >= (cell.Domain.Count()-1))
+                {
+                   // Backtrack(index--)
+                    this.BackTrack(sudoku: sudoku, cellIndex: index);
+                }
+                else
+                {
+                    this.undoDomainUpdate(sudoku: sudoku, cell: cell);
+                    this.CBTAlg(sudoku: sudoku, index: index);
+                }
             }
-
-        }
-        
         }
         return sudoku;
         
@@ -64,9 +59,12 @@ class CBT
             int backTrackCellIndex = cellIndex - 1;
             this.BackTrack(sudoku, backTrackCellIndex);
         }
+        
         this.undoDomainUpdate(sudoku: sudoku, cell: cell);
-        if(!this.isFinished) {
-            if(cell.DomainCounter == (cell.Domain.Count()-1))
+        
+        if(!this.isFinished) 
+        {
+            if(cell.DomainCounter == (cell.Domain.Count() - 1))
             {
                 int backTrackCellIndex = cellIndex - 1;
                 cell.DomainCounter = -1;
@@ -79,27 +77,24 @@ class CBT
                 this.CBTAlg(sudoku: sudoku, index: cellIndex);
             }
         }
+        
         return;
     }
-
 
     private void Debug(Board sudoku)
     {
         Console.ReadLine();
-        // sudoku.Print();
-        // this.printDomains(sudoku);
+        sudoku.Print();
+        this.printDomains(sudoku);
         
     }
     private void printDomains(Board sudoku)
     {
         foreach (Node cell in sudoku.sudoku)
         {
-            
             if (cell.Swappable)
             {
-                
                 Solver.DisplaySet(cell.Domain);
-                
             }
         }
     }
@@ -120,27 +115,20 @@ class CBT
     }
     private void forwardChecking(Node cell, Board sudoku)
     {
-       foreach (Node effected in sudoku.RowsSwappable[cell.Row])
+        // Handle the rows
+        this.HandleEffectedCells(cell: cell, effectedList: sudoku.RowsSwappable[cell.Row]);
+        
+        // Handle the columns
+        this.HandleEffectedCells(cell: cell, effectedList: sudoku.ColumnsSwappable[cell.Column]);
+        
+        // Handle the current block
+        this.HandleEffectedCells(cell: cell, effectedList: sudoku.BlocksSwappable[cell.Block]);
+    }
+
+    private void HandleEffectedCells(Node cell, List<Node> effectedList)
+    {
+        foreach (Node effected in effectedList)
         {
-            
-            if (effected != cell && effected.Domain.Contains(cell.Number) && !cell.EffectedCells.Contains(effected))
-            {
-                cell.EffectedCells.Add(effected);
-                effected.Domain.Remove(cell.Number);
-            }
-            
-        }
-        foreach (Node effected in sudoku.ColumnsSwappable[cell.Column])
-        {
-            if (effected != cell && effected.Domain.Contains(cell.Number) && !cell.EffectedCells.Contains(effected))
-            {
-                cell.EffectedCells.Add(effected);
-                effected.Domain.Remove(cell.Number);
-            }
-        }
-        foreach (Node effected in sudoku.BlocksSwappable[cell.Block])
-        {
-           
             if (effected != cell && effected.Domain.Contains(cell.Number) && !cell.EffectedCells.Contains(effected))
             {
                 cell.EffectedCells.Add(effected);

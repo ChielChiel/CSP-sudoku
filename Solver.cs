@@ -13,14 +13,10 @@ class Solver {
         Board consistent = this.NodeConsistency(initial);
         CBT cBT = new CBT();
         Board result = cBT.CBTAlg(consistent);
+        stopWatch.Stop();
         
         this.Solution = result;
-        stopWatch.Stop();
-
-        TimeSpan diff = stopWatch.Elapsed;
-        this.Runtime = diff.TotalSeconds; 
-        Console.WriteLine("This problem took: " + diff.TotalSeconds + " seconds to complete. The following board is the solution: ");
-        result.Print();
+        this.Runtime = stopWatch.Elapsed.TotalSeconds; 
     }
 
     public Board GetSolution()
@@ -55,7 +51,6 @@ class Solver {
             Console.Write(" {0}", i);
         }
         Console.WriteLine(" }");
-        
     }
    
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-
-namespace sudoku
+﻿namespace sudoku
 {
     class Progrm
     {
@@ -26,24 +22,14 @@ namespace sudoku
             int number_of_sudokus = all_sudokus.GetLength(0);
             Board sudoku;
             for (int i = 0; i < number_of_sudokus; i++)
-            // for (int i = 0; i < 2; i++)
             {
                 Console.WriteLine($"\n\x1b[1mSudoku number: {i + 1}\x1b[0m");
                 sudoku = new Board(all_sudokus.GetRow(i));
-                // Solver oplosser; //= new Solver(sudoku);
-                Solver oplosser = new Solver(sudoku);
-                Board oplossing = oplosser.GetSolution();
-                // Double[] runtimes = new Double[100];
-                Double totalRuntime = 0.0;
-                for (int j = 0; j < 100; j++)
-                {
-                    sudoku =  new Board(all_sudokus.GetRow(i));
-                    oplosser = new Solver(sudoku);
-                    totalRuntime += oplosser.GetRunTime();
-                }
-
-                Console.WriteLine(totalRuntime / 100.0);
-
+                
+                Solver solver = new Solver(sudoku);
+                Board solution = solver.GetSolution();
+                Console.WriteLine("This problem took: " + solver.GetRunTime() + " seconds to complete. The following board is the solution:");
+                solution.Print();
             }
         }
     }
