@@ -29,30 +29,31 @@ class CBT
         
             this.forwardChecking(cell, sudoku);
 
-        //we check whether the forwardchecking does not lead to empty domains. If it does, we backtrack and do DFS on the next available branch 
-        if (IsNotEmpty(sudoku))
-        {
-            this.CBTAlg(sudoku: sudoku, index: index + 1);
-        }
-        else
-        {
-            //backtrack consists of undoing the domainupdates (so updating the node.Domain for all the effected nodes) and doing CBT on the next available option
-            if(cell.DomainCounter >= (cell.Domain.Count()-1))
+            //we check whether the forwardchecking does not lead to empty domains. If it does, we backtrack and do DFS on the next available branch 
+            if (IsNotEmpty(sudoku))
             {
-                this.BackTrack(sudoku: sudoku, cellIndex: index);
+                this.CBTAlg(sudoku: sudoku, index: index + 1);
             }
             else
             {
-                //backtrack
+                //backtrack consists of undoing the domainupdates (so updating the node.Domain for all the effected nodes) and doing CBT on the next available option
                 if(cell.DomainCounter >= (cell.Domain.Count()-1))
                 {
-                   // Backtrack(index--)
                     this.BackTrack(sudoku: sudoku, cellIndex: index);
                 }
                 else
                 {
-                    this.undoDomainUpdate(sudoku: sudoku, cell: cell);
-                    this.CBTAlg(sudoku: sudoku, index: index);
+                    //backtrack
+                    if(cell.DomainCounter >= (cell.Domain.Count()-1))
+                    {
+                        // Backtrack(index--)
+                        this.BackTrack(sudoku: sudoku, cellIndex: index);
+                    }
+                    else
+                    {
+                        this.undoDomainUpdate(sudoku: sudoku, cell: cell);
+                        this.CBTAlg(sudoku: sudoku, index: index);
+                    }
                 }
             }
         }
