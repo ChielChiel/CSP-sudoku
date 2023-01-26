@@ -8,7 +8,7 @@ namespace sudoku
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("\x1b[1mHill climb sudoku solver\x1b[0m");
+            Console.WriteLine("\x1b[1mCBT sudoku solver\x1b[0m");
             
             string path_to_file;
             if(args.Length > 0)
@@ -30,8 +30,20 @@ namespace sudoku
             {
                 Console.WriteLine($"\n\x1b[1mSudoku number: {i + 1}\x1b[0m");
                 sudoku = new Board(all_sudokus.GetRow(i));
+                // Solver oplosser; //= new Solver(sudoku);
                 Solver oplosser = new Solver(sudoku);
                 Board oplossing = oplosser.GetSolution();
+                // Double[] runtimes = new Double[100];
+                Double totalRuntime = 0.0;
+                for (int j = 0; j < 100; j++)
+                {
+                    sudoku =  new Board(all_sudokus.GetRow(i));
+                    oplosser = new Solver(sudoku);
+                    totalRuntime += oplosser.GetRunTime();
+                }
+
+                Console.WriteLine(totalRuntime / 100.0);
+
             }
         }
     }

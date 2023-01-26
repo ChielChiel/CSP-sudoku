@@ -6,7 +6,7 @@ class CBT
     {
         if (index >= sudoku.sudoku.Length)
         {
-            sudoku.Print();
+            // sudoku.Print();
             this.isFinished = true;
             return sudoku;
         }
@@ -86,8 +86,8 @@ class CBT
     private void Debug(Board sudoku)
     {
         Console.ReadLine();
-        sudoku.Print();
-        this.printDomains(sudoku);
+        // sudoku.Print();
+        // this.printDomains(sudoku);
         
     }
     private void printDomains(Board sudoku)
@@ -98,7 +98,6 @@ class CBT
             if (cell.Swappable)
             {
                 
-                Console.Write("DC: " + cell.DomainCounter.ToString());
                 Solver.DisplaySet(cell.Domain);
                 
             }
