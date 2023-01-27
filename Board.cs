@@ -51,7 +51,7 @@ class Board
         this.UpdateBlocks(onlySwappableNumbers: false);
     }
 
-    //returns from the flat array arrays with the indexes, sorted in blocks. FI: the numbers  [0, 1, 2, 9, 10, 11, 18, 19, 20] are in block 0
+    // Returns from the flat array arrays with the indexes, sorted in blocks. FI: the numbers  [0, 1, 2, 9, 10, 11, 18, 19, 20] are in block 0
     public void UpdateBlocks(bool onlySwappableNumbers = false)
     {
         this.blocks = new List<List<int>>();
@@ -80,7 +80,7 @@ class Board
     }
 
     // Method used for pretty printing the sudoku array as a proper 9x9 sudoku. Blue color is used to indicate that
-    //Nodes that are unswappable.
+    // Nodes that are unswappable.
     public void Print()
     {
         string row;

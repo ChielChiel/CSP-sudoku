@@ -4,6 +4,7 @@
     {
         static void Main(string[] args)
         {
+            // Formatting for pretty printing the results of the programm
             Console.WriteLine("\x1b[1mCBT sudoku solver\x1b[0m");
             
             string path_to_file;
@@ -24,10 +25,15 @@
             for (int i = 0; i < number_of_sudokus; i++)
             {
                 Console.WriteLine($"\n\x1b[1mSudoku number: {i + 1}\x1b[0m");
+                // Get the sudoku
                 sudoku = new Board(all_sudokus.GetRow(i));
                 
+                // Instantiate a Solver object with the given sudoku
                 Solver solver = new Solver(sudoku);
+
+                // Get the solution of the solver
                 Board solution = solver.GetSolution();
+
                 Console.WriteLine("This problem took: " + solver.GetRunTime() + " seconds to complete. The following board is the solution:");
                 solution.Print();
             }
